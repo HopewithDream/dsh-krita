@@ -1,0 +1,3 @@
+- insert:
+    - id: malformed-json-retry
+      name: '@local/dsh-malformed-json-retry'

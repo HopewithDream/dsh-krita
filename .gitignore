@@ -1,0 +1,16 @@
+# Node / DSH
+node_modules/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Krita scratch output and backups
+tests/out/
+*.kra~
+*.kra-autosave.kra
+
+# OS noise
+Thumbs.db
+.DS_Store

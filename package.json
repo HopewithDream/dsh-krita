@@ -1,0 +1,52 @@
+{
+  "name": "dsh-krita-painter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "把真实 Krita 接进 DSH：单一 krita 工具 + 渐进披露绘画 skill + 「Krita 画师」模式，支持笔触/图层/选区/滤镜/导出与完整 Krita Python API，按批执行、按需加载。",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HopewithDream/dsh-krita.git"
+  },
+  "homepage": "https://github.com/HopewithDream/dsh-krita#readme",
+  "bugs": {
+    "url": "https://github.com/HopewithDream/dsh-krita/issues"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "krita",
+    "ai-agent",
+    "digital-painting",
+    "agent-skill",
+    "creative-tools"
+  ],
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "lib",
+    "krita-plugin",
+    "skills",
+    "scripts",
+    "docs",
+    "extras",
+    "cordis.patch.yml",
+    "PROTOCOL.md",
+    "README.md",
+    "LICENSE",
+    "THIRD-PARTY.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+# dsh-krita bundle patch
+#
+# Inserts one agent preset instead of a global plugin row: the `krita` tool and
+# its skill only cost prompt tokens inside the Krita Painter mode.
+- insert:
+    - id: preset-krita
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: krita
+        name: Krita 画师
+        description: 连接本机 Krita 画画：Krita 工具、绘画 skill、画布审阅与迭代导出。
+        order: 5
+        plugins:
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: |-
+                You are a digital painter working inside a live Krita desktop app. You plan the picture, paint it in Krita, look at exported previews, and iterate until it matches the brief. The canvas is the deliverable in this mode, not code.
+
+                Rules:
+                - Load the `krita` skill before the first krita tool call; follow its workflow and read its references only when needed.
+                - Batch 3-10 bridge commands per krita call. Use `status` and `start`/`setup` when the bridge is down.
+                - For Python beyond a short snippet (or containing many quotes/braces), write a `.py` file with the normal write tool and call `py` with `{"file":"<path>"}`. Never embed a long script inside the tool-call JSON: malformed JSON kills the whole run.
+                - Export a PNG preview and use `read_image` after each meaningful pass; judge composition, values, shapes, and color from the image.
+                - Work in passes: block-in -> refine -> color -> shading -> highlights -> cleanup. Name layers and keep edits non-destructive.
+                - Never overwrite an existing .kra or PNG without asking; save iterations as v01, v02, ... instead.
+                - Do not close Krita or the user's documents, and do not run destructive py snippets, without explicit approval.
+                - Keep replies short: say what changed, what the preview showed, and what you will do next.
+          - id: krita-tool
+            name: dsh-krita-painter
+            config:
+              port: 5678
+              requestTimeoutMs: 30000
+              startTimeoutMs: 120000
+          - id: tool-fs
+            name: '@deepseek-ai/dsh-tool-fs'
+            config:
+              read: true
+              readImage: true
+              write: true
+              edit: false
+          - id: skill-filesystem
+            name: '@deepseek-ai/dsh-skill-filesystem'
+            config:
+              providerName: krita-filesystem
+              includeDefaultRoots: false
+              watch: false
+              customSkillDirs:
+                - !!js process.env.DSH_PROFILE_DIR + '/node_modules/dsh-krita-painter/skills'
+          - id: tool-skill
+            name: '@deepseek-ai/dsh-tool-skill'
+          - id: tool-ask-user
+            name: '@deepseek-ai/dsh-tool-ask-user'
+          - id: compaction
+            name: cordis:group
+            group: true
+            isolate:
+              compaction: true
+            config:
+              - id: compaction-basic
+                name: '@deepseek-ai/dsh-compaction-basic'
+              - id: command-compact
+                name: '@deepseek-ai/dsh-command-compact'

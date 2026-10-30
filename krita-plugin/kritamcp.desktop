@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=kritamcp
+X-Python-2-Compatible=false
+Name=DSH Krita Bridge
+Comment=DSH Krita Bridge: local HTTP bridge for agent drawing and scripting in Krita
